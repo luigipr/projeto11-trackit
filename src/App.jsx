@@ -4,8 +4,8 @@ import SignUpPage from "./pages/SignUpPage"
 import HabitsPage from "./pages/HabitsPage"
 import TodayPage from "./pages/TodayPage"
 import HistoryPage from "./pages/HistoryPage"
-import axios from 'axios';
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import ResetStyle from "./style/ResetStyle"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
 
@@ -19,7 +19,7 @@ export default function App() {
   return (
       <>
           <BrowserRouter>
-
+            <ResetStyle />
 
               <Routes>
               <Route path="/" element={<LoginPage setToken={setToken} />} />

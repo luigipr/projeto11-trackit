@@ -41,7 +41,7 @@ export default function LoginPage(props) {
       navigate('/habitos');
 
     });
-    promise.catch( erro => alert(erro.response.data.message));
+    promise.catch( error => alert(error.response.data.message));
     
   }
 

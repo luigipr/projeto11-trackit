@@ -1,11 +1,11 @@
-
+import Footer from "../components/Footer"
 import axios from "axios"
 import { useContext, useState, useEffect} from "react"
 import { TokenContext } from "./../contexts/TokenContext"
 import { Usercontext } from "./../contexts/UserContext"
 import NavBar from "../components/NavBar"
 import styled from "styled-components"
-
+import { ThreeDots } from "react-loader-spinner"
 
 export default function HabitsPage() {
     const {token} = useContext(TokenContext);
@@ -13,25 +13,28 @@ export default function HabitsPage() {
     console.log(token)
     console.log(user)
 
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    
+
     useEffect(() => {
 
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
-
-        axios.get(`${BASE_URL}/habits`, config)
-            .then((res) => setHabits(res.data))
-            .catch((err) => console.log(err.response.data))
+        axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits', config)
+            .then((answer) => setHabits(answer.data))
+            .catch((error) => console.log(error.response.data))
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setConcluded])
 
-    const [habits, setHabits] = useState(undefined);
+    const [habitsDays, setHabitsDays] = useState([])
+    const [habitName, setHabitName] = useState("")
+    const [habits, setHabits] = useState([]);
     const [AddingHabit, setAddingHabit] = useState(false)
     const [loading, setLoading] = useState(false)
-
+    
 
     const Week = [
         { name: 'd', id: 0 },
@@ -44,6 +47,7 @@ export default function HabitsPage() {
     ]
 
     function addHabit() {
+        setLoading(false)
         setAddingHabit(true)
     }
     function cancel() {
@@ -51,20 +55,59 @@ export default function HabitsPage() {
     }
 
 
+    function selectDays(Day) {
+        if(Day.day === true) {
+            const arr = habitsDays.filter(Day => Day.Day === true)
+            setHabitsDays(arr)
+        }
+        if (Day.day === false) {
+            const arr = [...habitsDays, Day];
+            setHabitsDays(arr)    
+            console.log(arr)
+
+        }
+    }
+
+
+
+
+
+    function registerHabit(e) {
+        e.preventDefault();
+        const url = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
+
+        const habit = { name: setHabitName, days: habitsDays};
+
+        const promise = axios.post(url, habit, config);
+
+        promise.catch(error => alert(error.response.data.message));
+
+        promise.then( answer => {
+            const arr = [...habits, habit];
+            
+            setHabits(arr)
+        })
+        setLoading(true)
+    }
+
+
+
     return (
         <Container>
             <NavBar data-test='header' />
             <AddHabit>
-                Meus hábitos
+                <h1>Meus hábitos</h1>
                 <button data-test="habit-create-btn" onClick={addHabit}>+</button>
             </AddHabit>
             <HabitsInfo data-test="habit-create-container" status={AddingHabit} >
                     <form onSubmit={registerHabit}>
                         <div>
-                            <input data-test="habit-name-input" disabled={loading} value={habitName} onChange={(e) => setHabitName(e.target.value)} type="text" placeholder="nome do hábito" />
+                            <input data-test="habit-name-input" disabled={loading} value={habitName} onChange={(e) => setHabitName(e.target.value)} 
+                            type="text" placeholder="nome do hábito" />
                             <Week >
                                 {Week.map((day) =>
-                                    <WeekButtons disabled={loading} data-test="habit-day" key={day.id} day={habitsDays.includes(day.id)} onClick={() => selectDays(day)}>{day.name.toUpperCase()}</WeekButtons>
+                                    <WeekButtons disabled={loading} data-test="habit-day" key={day.id}  day={habitsDays.includes(day.id)} 
+                                    onClick={() => selectDays(day)}>{day.name.toUpperCase()}</WeekButtons>
                                 )}
                             </Week>
                             <SendInfos>
@@ -77,12 +120,14 @@ export default function HabitsPage() {
                                             wrapperStyle={{}}
                                             wrapperClassName=""
                                             visible={true}
-                                        />}</button>
-                                    
+                                        />}
+                                </button>                                  
                             </SendInfos>
                         </div>
                     </form>
             </HabitsInfo>                                
+
+
 
 
                                     
@@ -93,7 +138,6 @@ export default function HabitsPage() {
         
         
             {habits.length < 1 &&
-
                 <NoHabits>
                     <p>
                         Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
@@ -101,7 +145,7 @@ export default function HabitsPage() {
                 </NoHabits>
             }
 
-        
+            <Footer />
         </Container>
 
 
@@ -148,22 +192,32 @@ const NoHabits = styled.div`
         }`
 
 const AddHabit = styled.div`
-    width: 365px;
-    height: 50px;
+    padding:0 15px 0 15px;
+    margin-top: 80px;
     display: flex;
-    color: #126BA5;
-justify-content: space-between;
-align-items: center; 
+    justify-content: space-between;
+    align-items: center;   
+    width: 303px;
 
-button {
-    width: 40px;
-    height: 35px;
-    color: #fff;
-    font-size: 25px;
-    background: #52B6FF;
-    border-radius: 5px;
-}
-
+        h1 {
+            font-weight: 400;
+            font-size: 22.976px;
+            color: #126BA5;
+        }
+        button {
+            width: 40px;
+            height: 35px;
+            background: #52B6FF;
+            border-radius: 4px;
+            font-size: 27px;
+            color: #FFFFFF;
+            text-align: center;
+            border-style: none;
+            cursor: pointer;
+            &:disabled {
+                background-color: #CFCFCF;
+            }
+        }
 `
 
 const Container = styled.div`
@@ -172,4 +226,48 @@ const Container = styled.div`
     height: 100vh;
     font-family: 'Lexend Deca', sans-serif;
 
+`
+
+const WeekButtons = styled.div`
+     width: 30px;
+    height: 30px;
+    background-color: ${props => props.day ? "#CFCFCF" : "#FFFFFF"};
+    border: 1px solid #D5D5D5;
+    border-radius: 5px;
+    font-size: 20px;
+    color: #DBDBDB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+`
+const SendInfos = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;  
+    margin-top: 15px;
+        button:first-of-type {
+            width: 69px;
+            height: 20px;
+            font-size: 16px;
+            color: #52B6FF;
+            border: none;
+            background-color: #FFFFFF;
+            margin-right: 23px;
+            cursor: pointer;
+        }
+        button{
+            width: 84px;
+            height: 35px;
+            background: #52B6FF;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #FFFFFF;
+            border-style: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 `
