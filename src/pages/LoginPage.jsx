@@ -5,11 +5,17 @@ import Input from "../components/Input"
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
+import { useContext } from "react"
+import { TokenContext } from "../contexts/TokenContext"
+import { Usercontext } from "../contexts/UserContext"
+
+
 
 export default function LoginPage(props) {
   
-  const {setToken} = props;
 
+  const { getUser } = useContext(Usercontext)
+  const {token, getToken} = useContext(TokenContext)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");  
 
@@ -19,7 +25,7 @@ export default function LoginPage(props) {
 
     e.preventDefault();
 
-    const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/camppi/auth/login';
+    const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
 
     const novoLogin = {email, password};
 
@@ -29,9 +35,10 @@ export default function LoginPage(props) {
       
       console.log(resposta.data.token);
       
-      setToken(resposta.data.token);
+      getToken(resposta.data.token);
+      getUser(resposta.data)
 
-      navigate('/market');
+      navigate('/habitos');
 
     });
     promise.catch( erro => alert(erro.response.data.message));
@@ -43,6 +50,7 @@ export default function LoginPage(props) {
       <BigLogo />
       <form onSubmit={login}>
         <Input
+          data-test="email-input"
           type="email"
           placeholder="E-mail"
           required
@@ -50,16 +58,17 @@ export default function LoginPage(props) {
           onChange={ (e) => setEmail(e.target.value)}
         />
         <Input
+         data-test="password-input"
           type="password"
           placeholder="Senha"
           required
           value={password}
           onChange={ (e) => setPassword(e.target.value)}
         />
-        <Button type="submit">Entrar</Button>
+        <Button type="submit" data-test="login-btn">Entrar</Button>
       </form>
 
-      <StyledLink to="cadastro">Não tem uma conta? Cadastre-se!</StyledLink>
+      <StyledLink to="cadastro"  data-test="signup-link">Não tem uma conta? Cadastre-se!</StyledLink>
     </Container>
   )
 }
@@ -72,7 +81,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #F60919;
+  background-color: #fff;
 `
 
 const StyledLink = styled(Link)`
@@ -80,5 +89,5 @@ const StyledLink = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #FFFFFF;
+  color: #52B6FF;
 `

@@ -1,8 +1,9 @@
-import styled from "styled-components"
-import HomePage from "./pages/HomePage/HomePage"
-import SeatsPage from "./pages/SeatsPage/SeatsPage"
-import SessionsPage from "./pages/SessionsPage/SessionsPage"
-import SuccessPage from "./pages/SuccessPage/SuccessPage"
+import { useState } from "react"
+import LoginPage from "./pages/LoginPage"
+import SignUpPage from "./pages/SignUpPage"
+import HabitsPage from "./pages/HabitsPage"
+import TodayPage from "./pages/TodayPage"
+import HistoryPage from "./pages/HistoryPage"
 import axios from 'axios';
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
@@ -12,20 +13,22 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 export default function App() {
 
-  axios.defaults.headers.common['Authorization'] = '2GkGoRP9ETlDO5k8paZaQY5V';
-
+  const [token, setToken] = useState('');
 
 
   return (
       <>
           <BrowserRouter>
 
+
               <Routes>
-              <Route path='/' element={<HomePage />} />               
-              <Route path='/assentos/:idSessao' element={<SeatsPage  />} />
-              <Route path='/sessoes/:idFilme' element={<SessionsPage />} />
-              <Route path='/sucesso' element={<SuccessPage />} />
+              <Route path="/" element={<LoginPage setToken={setToken} />} />
+              <Route path="/cadastro" element={<SignUpPage />} />
+              <Route path='/habitos' element={<HabitsPage token={token}/>} />
+              <Route path='/hoje' element={<TodayPage token={token}/>} />
+              <Route path='/historico' element={<HistoryPage token={token}/>} />
               </Routes>
+
               
           </BrowserRouter>
       </>
