@@ -24,8 +24,6 @@ return (
                             textColor: "#fff",
                             pathColor: "#fff",
                             trailColor: "transparent",
-
-
                         })}
                     />
                 </TodayButton>
@@ -36,10 +34,11 @@ return (
 }
 
 const FooterPage = styled.div`
+    font-family: 'Lexend Deca', sans-serif;
     background: #FFFFFF;
     color: #52B6FF;
-    width: 375px;
-    height: 70px;
+    width: 315px;
+    height: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -47,6 +46,7 @@ const FooterPage = styled.div`
     position: fixed;
     bottom: 0;
     p {
+            text-decoration: none;
             font-size: 18px;
             color: #52B6FF;
             cursor: pointer;

@@ -8,12 +8,13 @@ import axios from "axios"
 import { useContext } from "react"
 import { TokenContext } from "../contexts/TokenContext"
 import { Usercontext } from "../contexts/UserContext"
+import { ThreeDots } from "react-loader-spinner"
 
 
 
 export default function LoginPage(props) {
   
-
+  const [loading, setLoading] = useState(false)
   const { getUser } = useContext(Usercontext)
   const {token, getToken} = useContext(TokenContext)
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ export default function LoginPage(props) {
   function login(e){
 
     e.preventDefault();
+    setLoading(true)
 
     const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
 
@@ -38,7 +40,7 @@ export default function LoginPage(props) {
       getToken(resposta.data.token);
       getUser(resposta.data)
 
-      navigate('/habitos');
+      navigate('/hoje');
 
     });
     promise.catch( error => alert(error.response.data.message));
@@ -50,6 +52,7 @@ export default function LoginPage(props) {
       <BigLogo />
       <form onSubmit={login}>
         <Input
+          disabled={loading}
           data-test="email-input"
           type="email"
           placeholder="E-mail"
@@ -58,14 +61,23 @@ export default function LoginPage(props) {
           onChange={ (e) => setEmail(e.target.value)}
         />
         <Input
-         data-test="password-input"
+          disabled={loading}
+          data-test="password-input"
           type="password"
           placeholder="Senha"
           required
           value={password}
           onChange={ (e) => setPassword(e.target.value)}
         />
-        <Button type="submit" data-test="login-btn">Entrar</Button>
+        <Button type="submit" disabled={loading} data-test="login-btn">{!loading ? 'Entrar' :   <ThreeDots
+                                            color="#FFFFFF"
+                                            height="60"
+                                            width="60"
+                                            ariaLabel="three-dots-loading"
+                                            wrapperStyle={{}}
+                                            wrapperClassName=""
+                                            visible={true}
+                                        />}</Button>
       </form>
 
       <StyledLink to="cadastro"  data-test="signup-link">Não tem uma conta? Cadastre-se!</StyledLink>
@@ -75,7 +87,7 @@ export default function LoginPage(props) {
 
 const Container = styled.div`
   min-height: 100vh;
-  width: 100%;
+  width: 375px;
   padding: 31px;
   display: flex;
   justify-content: center;

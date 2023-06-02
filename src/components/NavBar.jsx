@@ -1,20 +1,21 @@
 import styled from "styled-components"
 import { Usercontext } from "../contexts/UserContext"
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
     const { user } = useContext(Usercontext)
     return (
         <NavBarStyle data-test="header" >
-            <h1>TrackIt</h1>
-            <img src={user.image} alt="userImage" />
+            <Link to='/'><h1>TrackIt</h1></Link>
+            <img src={user.image} alt="avatar" data-test="avatar" />
         </NavBarStyle>
     )
 }
 
 const NavBarStyle = styled.div`
-    width: 100%;
-    height: 70px;
+    width: 345px;
+    height: 50px;
     background: #126BA5;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
     display: flex;

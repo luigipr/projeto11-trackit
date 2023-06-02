@@ -6,6 +6,7 @@ import { Usercontext } from "./../contexts/UserContext"
 import NavBar from "../components/NavBar"
 import styled from "styled-components"
 import { ThreeDots } from "react-loader-spinner"
+import Trash from "./../assets/Trash.png"
 
 export default function HabitsPage() {
     const {token} = useContext(TokenContext);
@@ -50,25 +51,35 @@ export default function HabitsPage() {
         setLoading(false)
         setAddingHabit(true)
     }
+
+    
     function cancel() {
         setAddingHabit(false)
     }
 
 
-    function selectDays(Day) {
-        if(Day.day === true) {
-            const arr = habitsDays.filter(Day => Day.Day === true)
-            setHabitsDays(arr)
-        }
-        if (Day.day === false) {
-            const arr = [...habitsDays, Day];
+    function selectDays(day) {
+        console.log(day)
+        if(habitsDays.includes(day.id)) {
+
+            const arr = habitsDays.filter((d) => d !== day.id)
+            setHabitsDays(habitsDays.filter((d) => d !== day.id))
+            console.log(arr)
+            return
+        } 
+            const arr = [...habitsDays, day.id];
             setHabitsDays(arr)    
             console.log(arr)
-
-        }
     }
 
+    function deleteHabit(habit) {
+        const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}`
+        const promise = axios.delete(url, config)
 
+        promise.catch((error) => console.log(error.response.data))
+        promise.then( () =>  setHabits(habits.filter((h) => h.id !== habit.id) ))
+
+    }
 
 
 
@@ -76,16 +87,23 @@ export default function HabitsPage() {
         e.preventDefault();
         const url = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
 
-        const habit = { name: setHabitName, days: habitsDays};
+        const habit = { name: habitName, days: habitsDays};
 
         const promise = axios.post(url, habit, config);
 
-        promise.catch(error => alert(error.response.data.message));
+        promise.catch(error => {alert(error.response.data.message)
+            setLoading(false)
+        });
 
         promise.then( answer => {
+
+            const habit = answer.data
+
             const arr = [...habits, habit];
             
             setHabits(arr)
+            cancel();
+
         })
         setLoading(true)
     }
@@ -104,12 +122,12 @@ export default function HabitsPage() {
                         <div>
                             <input data-test="habit-name-input" disabled={loading} value={habitName} onChange={(e) => setHabitName(e.target.value)} 
                             type="text" placeholder="nome do hábito" />
-                            <Week >
+                            <Days >
                                 {Week.map((day) =>
                                     <WeekButtons disabled={loading} data-test="habit-day" key={day.id}  day={habitsDays.includes(day.id)} 
                                     onClick={() => selectDays(day)}>{day.name.toUpperCase()}</WeekButtons>
                                 )}
-                            </Week>
+                            </Days>
                             <SendInfos>
                                 <button type="button" disabled={loading} data-test="habit-create-cancel-btn" onClick={cancel}>Cancelar</button>
                                <button data-test="habit-create-save-btn" disabled={loading} type="submit">{!loading ? 'Salvar' :   <ThreeDots
@@ -128,13 +146,18 @@ export default function HabitsPage() {
             </HabitsInfo>                                
 
 
-
-
-                                    
-        
-                                    
-        
-        
+                {habits.map( habit =>  (
+                    <Habits key={habit.id} data-test="seat" >
+                        <h1 data-test="habit-name">{habit.name}</h1>
+                        <img src={Trash} alt='delete' data-test="habit-delete-btn" onClick={() => deleteHabit(habit)} />
+                        <Days>
+                        {Week.map((day) =>
+                            <WeekButtons disabled={true} data-test="habit-day" key={day.id}  day={(habit.days).includes(day.id)}>
+                                {day.name.toUpperCase()}</WeekButtons>
+                                    )}
+                        </Days>
+                    </Habits>
+                ))}                    
         
         
             {habits.length < 1 &&
@@ -145,7 +168,7 @@ export default function HabitsPage() {
                 </NoHabits>
             }
 
-            <Footer />
+            <Footer  data-test="menu"/>
         </Container>
 
 
@@ -158,8 +181,9 @@ const HabitsInfo = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 19px;    
+    padding: 10px;    
     margin-top: 20px;
+    margin-left: 8px;
     background-color: #FFFFFF;
     width: 340px;
     height: 180px;
@@ -181,9 +205,32 @@ const HabitsInfo = styled.div`
         }
 
 `
+const Habits = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 19px;    
+    margin-top: 20px;
+    background-color: #FFFFFF;
+    width: 340px;
+    border-radius: 5px;
+    position: relative;
+        h1 {
+           font-size:20px ;
+           color: #666666
+        }
+        img {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+        }
 
+`
 
 const NoHabits = styled.div`
+    align-self: center;
+    padding: 0 15px;
     width: 338px;
     margin-top: 25px;
         p {
@@ -192,12 +239,12 @@ const NoHabits = styled.div`
         }`
 
 const AddHabit = styled.div`
-    padding:0 15px 0 15px;
+    padding:0 15px;
     margin-top: 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;   
-    width: 303px;
+    width: 330px;
 
         h1 {
             font-weight: 400;
@@ -224,6 +271,7 @@ const Container = styled.div`
     background-color: #D4D4D4;
     width: 375px;
     height: 100vh;
+    padding-top: 15px;
     font-family: 'Lexend Deca', sans-serif;
 
 `
@@ -271,3 +319,8 @@ const SendInfos = styled.div`
             align-items: center;
         }
 `
+const Days = styled.div`
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+    `

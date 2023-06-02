@@ -1,4 +1,4 @@
-import { useState } from "react"
+
 import LoginPage from "./pages/LoginPage"
 import SignUpPage from "./pages/SignUpPage"
 import HabitsPage from "./pages/HabitsPage"
@@ -13,7 +13,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 export default function App() {
 
-  const [token, setToken] = useState('');
 
 
   return (
@@ -22,11 +21,11 @@ export default function App() {
             <ResetStyle />
 
               <Routes>
-              <Route path="/" element={<LoginPage setToken={setToken} />} />
+              <Route path="/" element={<LoginPage />} />
               <Route path="/cadastro" element={<SignUpPage />} />
-              <Route path='/habitos' element={<HabitsPage token={token}/>} />
-              <Route path='/hoje' element={<TodayPage token={token}/>} />
-              <Route path='/historico' element={<HistoryPage token={token}/>} />
+              <Route path='/habitos' element={<HabitsPage />} />
+              <Route path='/hoje' element={<TodayPage />} />
+              <Route path='/historico' element={<HistoryPage />} />
               </Routes>
 
               

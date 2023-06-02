@@ -5,6 +5,7 @@ import Button from "../components/Button"
 import Input from "../components/Input"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
+import { ThreeDots } from "react-loader-spinner"
 
 
 export default function SignUpPage() {
@@ -12,12 +13,13 @@ export default function SignUpPage() {
     const [email, setEmail] = useState("");
     const [image, setImage] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false)
   
     const navigate = useNavigate();
   
     function signUp(e){
       e.preventDefault();
-  
+      setLoading(true);
       const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up';
   
       const newUser = {name, password, email, image};
@@ -40,6 +42,7 @@ export default function SignUpPage() {
         <BigLogo />
         <form onSubmit={signUp}>
             <Input
+                disabled={loading}
                 data-test="email-input"
                 type="email"
                 placeholder="E-mail"
@@ -48,6 +51,7 @@ export default function SignUpPage() {
                 onChange={ (e) => setEmail(e.target.value)}
             />
             <Input
+                disabled={loading}
                 data-test="password-input"
                 type="password"
                 placeholder="Senha"
@@ -56,6 +60,7 @@ export default function SignUpPage() {
                 onChange={ (e) => setPassword(e.target.value)}
             />
             <Input
+                disabled={loading}
                 data-test="user-name-input" 
                 type="text"
                 placeholder="Nome"
@@ -64,6 +69,7 @@ export default function SignUpPage() {
                 onChange={ (e) => setName(e.target.value)}
             />         
             <Input
+                disabled={loading}
                 data-test="user-image-input" 
                 type="url"
                 placeholder="Imagem"
@@ -71,7 +77,15 @@ export default function SignUpPage() {
                 value={image}
                 onChange={ (e) => setImage(e.target.value)}
             />
-            <Button type="submit" data-test="signup-btn">Cadastrar</Button>
+            <Button type="submit" disabled={loading} data-test="signup-btn">{!loading ? 'Cadastrar' :   <ThreeDots
+                                            color="#FFFFFF"
+                                            height="60"
+                                            width="60"
+                                            ariaLabel="three-dots-loading"
+                                            wrapperStyle={{}}
+                                            wrapperClassName=""
+                                            visible={true}
+                                        />}</Button>
         </form>
         <StyledLink to="/" data-test="login-link">Já possui uma conta? Faça login</StyledLink>
       </Container>
@@ -80,7 +94,7 @@ export default function SignUpPage() {
   
   const Container = styled.div`
     min-height: 100vh;
-    width: 100%;
+    width: 375px;
     font-style: Lexend Deca;
     padding: 31px;
     display: flex;
