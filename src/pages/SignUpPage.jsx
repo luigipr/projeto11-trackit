@@ -33,7 +33,9 @@ export default function SignUpPage() {
         navigate('/');
       });
   
-      promise.catch( erro => alert(erro.response.data.message));
+      promise.catch( erro => {alert(erro.response.data.message)
+        setLoading(false)
+    });
   
     }
   

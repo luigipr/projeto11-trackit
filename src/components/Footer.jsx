@@ -10,10 +10,10 @@ export default function Footer() {
     const {concluded} = useContext(Usercontext);
 
 return (
-    <FooterPage>
+    <FooterPage data-test="menu" >
         <Link to='/habitos'  data-test="habit-link"><p>Hábitos</p></Link>
         <Link to="/hoje" data-test="today-link" >
-                <TodayButton>
+                <TodayButton  data-test="today-link">
                     <CircularProgressbar
                         value={concluded}
                         text={"Hoje"}

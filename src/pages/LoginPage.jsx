@@ -43,7 +43,9 @@ export default function LoginPage(props) {
       navigate('/hoje');
 
     });
-    promise.catch( error => alert(error.response.data.message));
+    promise.catch( erro => {alert(erro.response.data.message)
+      setLoading(false)
+  });
     
   }
 
