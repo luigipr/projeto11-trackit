@@ -1,19 +1,35 @@
 import Footer from "../components/Footer"
 import axios from "axios"
 import { useContext, useState, useEffect} from "react"
-import { TokenContext } from "./../contexts/TokenContext"
 import { Usercontext } from "./../contexts/UserContext"
 import NavBar from "../components/NavBar"
 import styled from "styled-components"
-import { ThreeDots } from "react-loader-spinner"
-import Trash from "./../assets/Trash.png"
-
+import dayjs from "dayjs";
+import { useLocation } from "react-router-dom";
 
 
 export default function TodayPage() {
+    const { user, todayHabits, setTodayHabits, setConcluded } = useContext(Usercontext)
+
     
+    useEffect(() => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.token}`
+            }
+        }
+
+        axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today', config)
+            .then(answer => {
+                const data = answer.data
+                setTodayHabits(data)
+            }).catch(error => console.log(error.response.data))
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [reload])
     
-    
+
+
     
     
     

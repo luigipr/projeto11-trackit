@@ -104,7 +104,9 @@ export default function SignUpPage() {
     align-items: center;
     flex-direction: column;
     background-color: #FFF;
-;
+    button {
+    margin-left:50px;
+  }
   `
   
 

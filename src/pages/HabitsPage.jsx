@@ -6,7 +6,7 @@ import { Usercontext } from "./../contexts/UserContext"
 import NavBar from "../components/NavBar"
 import styled from "styled-components"
 import { ThreeDots } from "react-loader-spinner"
-import Trash from "./../assets/Trash.png"
+import Trash from "./../assets/dump.svg"
 
 export default function HabitsPage() {
     const {token} = useContext(TokenContext);
@@ -52,7 +52,7 @@ export default function HabitsPage() {
         setAddingHabit(true)
     }
 
-    
+
     function cancel() {
         setAddingHabit(false)
     }
