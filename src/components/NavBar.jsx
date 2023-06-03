@@ -7,7 +7,7 @@ export default function NavBar() {
     const { user } = useContext(Usercontext)
     return (
         <NavBarStyle data-test="header" >
-            <Link to='/'><h1>TrackIt</h1></Link>
+            <Link to='/' style={{ textDecoration: 'none' }}><h1>TrackIt</h1></Link>
             <img src={user.image} alt="avatar" data-test="avatar" />
         </NavBarStyle>
     )

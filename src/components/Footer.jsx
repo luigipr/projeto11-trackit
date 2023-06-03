@@ -11,8 +11,8 @@ export default function Footer() {
 
 return (
     <FooterPage data-test="menu" >
-        <Link to='/habitos'  data-test="habit-link"><p>Hábitos</p></Link>
-        <Link to="/hoje" data-test="today-link" >
+        <Link to='/habitos'  data-test="habit-link" style={{ textDecoration: 'none' }}><p>Hábitos</p></Link>
+        <Link to="/hoje" data-test="today-link" style={{ textDecoration: 'none' }} >
                 <TodayButton  data-test="today-link">
                     <CircularProgressbar
                         value={concluded}
@@ -28,7 +28,7 @@ return (
                     />
                 </TodayButton>
         </Link>
-        <Link to='/historico' data-test="history-link"><p>Histórico</p></Link>
+        <Link to='/historico' data-test="history-link" style={{ textDecoration: 'none' }}><p>Histórico</p></Link>
     </FooterPage>
     )
 }
@@ -45,6 +45,7 @@ const FooterPage = styled.div`
     padding: 30px;
     position: fixed;
     bottom: 0;
+    text-decoration:none;
     p {
             text-decoration: none;
             font-size: 18px;
