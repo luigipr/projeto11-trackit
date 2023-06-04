@@ -88,7 +88,7 @@ export default function TodayPage() {
                             <h3 data-test="today-habit-sequence">Sequência atual: <p >{habit.currentSequence} {habit.currentSequence > 1 ? 'dias' : habit.currentSequence === 0 ? '' : 'dia'}</p></h3>
                             <h3 data-test="today-habit-record">Record: <span>  {habit.highestSequence} {habit.highestSequence > 1 ? 'dias' : habit.highestSequence === 0 ? '' : 'dia'}</span> </h3>
                         </div>
-                        <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(habit, i)} done={habit.done}></DoneButton>
+                        <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(habit)} done={habit.done}></DoneButton>
                     </RegisteredHabits>
                 )}
             </HabitsPageStyle>
