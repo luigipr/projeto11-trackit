@@ -10,7 +10,7 @@ import Trash from "./../assets/dump.svg"
 
 export default function HabitsPage() {
     const {token} = useContext(TokenContext);
-    const {user, setConcluded, setTodayHabits} = useContext(Usercontext);
+    const {user, setConcluded, setTodabits} = useContext(Usercontext);
     console.log(token)
     console.log(user)
 
@@ -54,7 +54,9 @@ export default function HabitsPage() {
 
 
     function cancel() {
-        setAddingHabit(false)
+        setAddingHabit(false) 
+        setHabitName("")
+        setHabitsDays([])   
     }
 
 
@@ -85,6 +87,12 @@ export default function HabitsPage() {
 
     function registerHabit(e) {
         e.preventDefault();
+
+        if (habitsDays.length < 1) {
+            alert("Escolha pelo menos um dia da semana")
+            return
+        }
+
         const url = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
 
         const habit = { name: habitName, days: habitsDays};
@@ -93,6 +101,8 @@ export default function HabitsPage() {
 
         promise.catch(error => {alert(error.response.data.message)
             setLoading(false)
+            setHabitName("")
+            setHabitsDays([])
         });
 
         promise.then( answer => {
@@ -106,6 +116,8 @@ export default function HabitsPage() {
 
         })
         setLoading(true)
+
+
     }
 
 
@@ -145,7 +157,7 @@ export default function HabitsPage() {
                     </form>
             </HabitsInfo>                                
 
-
+                       
                 {habits.map( habit =>  (
                     <Habits key={habit.id} data-test="seat" >
                         <h1 data-test="habit-name">{habit.name}</h1>
@@ -158,7 +170,6 @@ export default function HabitsPage() {
                         </Days>
                     </Habits>
                 ))}                    
-        
         
             {habits.length < 1 &&
                 <NoHabits>
@@ -175,6 +186,7 @@ export default function HabitsPage() {
 
     )
 }
+
 
 const HabitsInfo = styled.div`
     display: flex;
@@ -209,10 +221,12 @@ const Habits = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 19px;    
+    padding: 19px;  
+    margin-bottom: 5px; 
+    margin-left: 8px; 
     margin-top: 20px;
     background-color: #FFFFFF;
-    width: 340px;
+    width: 320px;
     border-radius: 5px;
     position: relative;
         h1 {
@@ -270,8 +284,9 @@ const AddHabit = styled.div`
 const Container = styled.div`
     background-color: #D4D4D4;
     width: 375px;
-    height: 100vh;
+    min-height: calc(100vh - 70px);;
     padding-top: 15px;
+    margin-bottom: 70px;
     font-family: 'Lexend Deca', sans-serif;
 
 `
