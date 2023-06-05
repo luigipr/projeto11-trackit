@@ -163,7 +163,7 @@ export default function HabitsPage() {
 
                        
                 {habits.map( habit =>  (
-                    <Habits key={habit.id} data-test="seat" >
+                    <Habits key={habit.id}  data-test="habit-container"  >
                         <h1 data-test="habit-name">{habit.name}</h1>
                         <img src={Trash} alt='delete' data-test="habit-delete-btn" onClick={() => deleteHabit(habit)} />
                         <Days>

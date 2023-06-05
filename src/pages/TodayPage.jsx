@@ -76,7 +76,7 @@ export default function TodayPage() {
         <NavBar />
         <Container>
         <HabitsPageStyle >
-                <Day concluded={(todayHabits.find((h) => h.done === true))}>
+                <Day data-test="today" concluded={(todayHabits.find((h) => h.done === true))} >
                     <h1 data-test="today">{`${weekdays.charAt(0).toUpperCase() + weekdays.slice(1)}, ${day}`}</h1>
                     <p data-test="today-counter">{location.pathname === "/hoje" && render()}</p>
                 </Day>
