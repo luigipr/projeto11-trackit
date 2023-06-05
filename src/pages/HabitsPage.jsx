@@ -75,11 +75,23 @@ export default function HabitsPage() {
     }
 
     function deleteHabit(habit) {
-        const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}`
-        const promise = axios.delete(url, config)
 
-        promise.catch((error) => console.log(error.response.data))
-        promise.then( () =>  setHabits(habits.filter((h) => h.id !== habit.id) ))
+        const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}`
+
+        if (window.confirm("Deseja apagar o hábito?")) {
+            axios.delete(url, config)
+                .then(() => {
+                    setHabits(habits.filter((h) => h.id !== habit.id))
+                    
+                }).catch((error) => console.log(error.response.data))
+        } else {
+            return
+        }
+        
+        //const promise = axios.delete(url, config)
+
+        //promise.catch((error) => console.log(error.response.data))
+        //promise.then( () =>  setHabits(habits.filter((h) => h.id !== habit.id) ))
 
     }
 
