@@ -92,6 +92,10 @@ export default function HabitsPage() {
             alert("Escolha pelo menos um dia da semana")
             return
         }
+        if (habitName.length === 0) {
+            alert("Escolha um nome para o hábito")
+            return
+        }
 
         const url = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
 
